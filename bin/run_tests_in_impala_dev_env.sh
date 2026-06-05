@@ -1,3 +1,4 @@
+#!/bin/bash
 # Copyright 2026 Cloudera Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,10 +43,7 @@ unset IMPYLA_SSL_WRONG_CERT
 # Run tests without SSL and authentication.
 $IMPALA_HOME/bin/start-impala-cluster.py
 unset IMPYLA_REPORT_PREFIX
-set +e
-python3 -m tox $TOX_ENV_ARGS
-ret=$?
-set -e
+SUCCESS=$(python3 -m tox $TOX_ENV_ARGS)
 
 # Run tests with SSL enabled.
 export IMPALA_SSL_CERT_DIR=$IMPALA_HOME/be/src/testutil
@@ -54,10 +52,8 @@ export IMPALA_SSL_ARGS="--ssl_client_ca_certificate=$IMPYLA_SSL_CERT --ssl_serve
 export IMPYLA_SSL_WRONG_CERT=$IMPALA_SSL_CERT_DIR/incorrect-commonname-cert.pem
 $IMPALA_HOME/bin/start-impala-cluster.py --impalad_args="$IMPALA_SSL_ARGS" --catalogd_args="$IMPALA_SSL_ARGS" --state_store_args="$IMPALA_SSL_ARGS"
 export IMPYLA_REPORT_PREFIX="ssl-"
-set +e
-python3 -m tox $TOX_ENV_ARGS -- -m ssl
-ret=$(( ret != 0 ? ret : $? ))
-set -e
+ret=$(python3 -m tox $TOX_ENV_ARGS -- -m ssl)
+if [[ SUCCESS -eq 0 ]]; then SUCCESS=$ret; fi
 
 
 unset IMPYLA_SSL_CERT
@@ -66,10 +62,8 @@ unset IMPYLA_SSL_WRONG_CERT
 export IMPYLA_TEST_AUTH_MECH=JWT
 $IMPALA_HOME/bin/start-impala-cluster.py --impalad_args="--jwt_token_auth=true --jwt_validate_signature=false --jwt_allow_without_tls=true"
 export IMPYLA_REPORT_PREFIX="jwt-"
-set +e
-python3 -m tox $TOX_ENV_ARGS -- -m jwt_auth
-ret=$(( ret != 0 ? ret : $? ))
-set -e
+ret=$(python3 -m tox $TOX_ENV_ARGS -- -m jwt_auth)
+if [[ SUCCESS -eq 0 ]]; then SUCCESS=$ret; fi
 
 exit $ret
 

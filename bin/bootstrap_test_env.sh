@@ -14,17 +14,17 @@
 
 # Install dependencies to run tests on each supported Python version using tox.
 
-sudo apt install --yes python3-pip
+sudo apt install --yes --quiet python3-pip
 python3 -m pip install tox
 
 # Install various python versions.
 # Some dependencies in Python 3.8 and 3.9 also need distutils.
 sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt update
-sudo apt install --yes python3.8 python3.8-dev python3.8-distutils
-sudo apt install --yes python3.9 python3.9-dev python3.9-distutils
-sudo apt install --yes python3.10 python3.10-dev
-sudo apt install --yes python3.11 python3.11-dev
-sudo apt install --yes python3.12 python3.12-dev
-sudo apt install --yes python3.13 python3.13-dev
-sudo apt install --yes python3.14 python3.14-dev
+sudo apt install --yes --quiet python3.8 python3.8-dev python3.8-distutils
+sudo apt install --yes --quiet python3.9 python3.9-dev python3.9-distutils
+sudo apt install --yes --quiet python3.10 python3.10-dev
+sudo apt install --yes --quiet python3.11 python3.11-dev
+sudo apt install --yes --quiet python3.12 python3.12-dev
+sudo apt install --yes --quiet python3.13 python3.13-dev
+sudo apt install --yes --quiet python3.14 python3.14-dev
